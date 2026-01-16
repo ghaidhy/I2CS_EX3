@@ -1,66 +1,86 @@
-# Ex3 – Pac-Man Algorithm (Client Side)
+# I2CS Ex3 – Pac-Man Project
 
-## General Description
-This project implements an automatic Pac-Man algorithm as part of Ex3 in the course
-"Introduction to Computer Science (I2CS)".
+## Overview
+This project is part of the Introduction to Computer Science (I2CS) course.
+The goal of Ex3 is to design and implement a complete Pac-Man game using
+object-oriented programming principles, code reuse, and integration.
 
-The goal of the algorithm is to control Pac-Man automatically in order to eat all the
-pink dots on the board while avoiding ghosts and taking advantage of green (power) dots.
-
----
-
-## Movement Rules
-At every step, Pac-Man can move in one of the four directions:
-UP, DOWN, LEFT, or RIGHT.
-
-The algorithm decides the next move according to the current game state.
+This README describes the **design of the Pac-Man algorithm** as required in
+Stage 2 of the assignment.
 
 ---
 
-## Algorithm Strategy
+## Pac-Man Algorithm – Design
 
-The decision-making process of Pac-Man is based on the following priorities:
-
-### 1. Eatable Ghosts
-If one or more ghosts are in an *eatable* state (after Pac-Man eats a green dot),
-Pac-Man moves toward the **closest eatable ghost** in order to gain extra points.
-
-### 2. Avoiding Ghosts
-If the ghosts are not eatable, Pac-Man avoids dangerous areas around them.
-Cells close to ghosts are considered unsafe and are avoided when possible.
-
-### 3. Green Dots (Power Pills)
-When ghosts are not eatable, Pac-Man prefers moving toward a **green dot**
-if it is reachable safely.
-Eating a green dot allows Pac-Man to eat ghosts for a limited time.
-
-### 4. Pink Dots
-If no green dot is nearby or safe, Pac-Man moves toward the **nearest pink dot**
-using a shortest-path (BFS) search.
-
-### 5. Fallback Move
-If no safe path is found, Pac-Man chooses a legal move that maximizes the distance
-from the nearest ghost.
+### Goal
+The main goal of the Pac-Man is to **eat all the pink dots** on the board while
+**avoiding the ghosts**.  
+When Pac-Man eats a green dot, the ghosts become *eatable* for a short period
+of time, which changes the strategy of the algorithm.
 
 ---
 
-## Path Finding
-The algorithm uses a **Breadth-First Search (BFS)** approach on the game board in order to:
-- Find the shortest path to a target (ghost, green dot, or pink dot)
-- Avoid walls and dangerous cells
-- Decide the first direction to move in each step
+### Board and Movement
+- The game board is represented as a 2D grid.
+- Pac-Man can move **one step at a time**.
+- Allowed movement directions are:
+    - UP
+    - DOWN
+    - LEFT
+    - RIGHT
+- Pac-Man cannot move through walls.
+
+---
+
+### Algorithm Logic
+
+At each step of the game, Pac-Man makes a decision based on the current state
+of the board:
+
+#### 1. Green Dot Mode (Ghosts are eatable)
+- If Pac-Man has recently eaten a green dot:
+    - Ghosts become eatable for a few seconds.
+    - Pac-Man moves **towards the nearest ghost**.
+    - The goal is to eat as many ghosts as possible during this time.
+
+#### 2. Danger Avoidance (Ghosts are close)
+- If ghosts are not eatable:
+    - The distance between Pac-Man and each ghost is calculated.
+    - If a ghost is closer than a predefined safety distance:
+        - Pac-Man moves in a direction that **increases the distance** from the
+          nearest ghost.
+    - This step has higher priority than eating pink dots.
+
+#### 3. Eating Pink Dots (Safe Situation)
+- If no ghost is close and no green dot is active:
+    - Pac-Man searches for the **nearest pink dot**.
+    - Pac-Man moves in the direction that minimizes the distance to that dot.
+    - The goal is to clear the board as efficiently as possible.
+
+---
+
+### Decision Priority
+The algorithm follows this priority order:
+1. Eat ghosts when they are eatable (after green dot).
+2. Escape from nearby ghosts.
+3. Move towards the nearest pink dot.
+
+---
+
+### Algorithm Loop
+This decision process is repeated continuously:
+- At every game step, Pac-Man re-evaluates the board.
+- A new movement decision is made based on updated positions of ghosts and dots.
+- The algorithm runs until the game ends (win or loss).
 
 ---
 
 ## Summary
-This algorithm enables Pac-Man to:
-- Move automatically without user input
-- Eat all pink dots efficiently
-- Avoid ghosts when they are dangerous
-- Chase ghosts when they are eatable
-- Successfully complete advanced game levels (including Level 4)
+This algorithm balances:
+- **Safety** (avoiding ghosts),
+- **Opportunity** (eating ghosts when possible),
+- **Efficiency** (clearing pink dots).
 
----
+The design is simple, modular, and suitable for implementation using the
+Map2D algorithms developed in Ex2.
 
-## Author
-Student ID: 214756645
