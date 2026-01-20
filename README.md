@@ -1,68 +1,59 @@
- Ex3 – Pac-Man Game
+# Ex3 – Pac-Man
 
-This project is part of the I2CS course.  
-In this assignment, I implemented a full Pac-Man game step by step, including the algorithm, server side, and GUI.
+---
 
+## Project Description
+This project implements a complete solution for Exercise 3 – Pac-Man. The purpose of this assignment is to apply object-oriented programming principles, code reuse, and integration by designing and implementing an automatic Pac-Man algorithm together with a game engine.
 
+The solution is divided into two main parts: a client side that controls the behavior of Pac-Man automatically, and a server side that manages the game logic, board, ghosts, collisions, scoring, and graphical display.
 
- Stage 3 – Pac-Man Algorithm
+---
 
-In this stage, I focused on building the logic that controls Pac-Man.
+## Game Rules
+Pac-Man moves on a grid-based board and at each step can move in one of four directions: UP, DOWN, LEFT, RIGHT.  
+The objective of the game is to eat all the pink dots on the board.
 
-- I implemented the algorithm in the `Ex3Algo` class.
-- The algorithm decides where Pac-Man should move in every step.
-- Pac-Man tries to collect food while staying away from ghosts.
-- I used distance calculations (BFS) to understand which paths are safe.
-- When a ghost gets too close, Pac-Man switches to an escape behavior.
+Ghosts move on the board and may kill Pac-Man upon collision.  
+When Pac-Man eats a green dot, the ghosts become eatable for a limited amount of time, allowing Pac-Man to collide with them safely.
 
-This stage was mainly about thinking algorithmically and making smart movement decisions.
+---
 
+## Pac-Man Algorithm (Ex3Algo)
+The Pac-Man algorithm makes a decision at every step based on the current game state.
 
+First, the algorithm reads the current position of Pac-Man, the positions of the ghosts, the structure of the board, and the current green-mode status.  
+Next, it generates all legal moves from the current position, considering only moves that do not lead into walls.
 
-Stage 4 – Server Implementation
+For each legal move, the algorithm evaluates safety by calculating the distance to nearby ghosts. If the ghosts are not eatable, moves that bring Pac-Man too close to a ghost are considered dangerous and are avoided whenever possible. If all available moves are dangerous, the algorithm selects the move that maximizes the distance from the nearest ghost.
 
-In this stage, I implemented the server side of the game.
+After the safety check, the algorithm selects a target. When the ghosts are eatable, the target is the nearest ghost. Otherwise, the target is the nearest pink dot on the board.  
+A shortest path to the selected target is calculated using a grid-based shortest path search (BFS), and Pac-Man moves one step along this path.
 
-- The server is responsible for managing the game state.
-- It keeps track of Pac-Man, ghosts, and the game board.
-- The server connects the game logic with the Pac-Man algorithm.
-- During the game loop, the server repeatedly calls the algorithm to get the next move.
+To prevent Pac-Man from getting stuck in small loops or repeating the same positions, the algorithm detects repeated movement patterns and switches to a different target when necessary. This ensures full coverage of the board and steady progress toward completing the level.
 
-The main goal of this stage was to separate the logic from the algorithm and manage the game flow correctly.
+---
 
-Main classes:
-- `ServerMain.java`
-- `MyPacmanGame.java`
+## Correctness and Properties
+The algorithm guarantees that Pac-Man always performs a legal move, avoids dangerous situations whenever possible, and eventually eats all pink dots on the board.  
+The behavior adapts dynamically to changes in ghost positions and game state.
 
+---
 
+## Complexity Analysis
+Let the board size be N x M.
 
- Stage 5 – GUI and Full Integration
+Each BFS computation runs in O(N·M).  
+A constant number of BFS operations are performed per step, making the solution efficient for the given game sizes.
 
-In this stage, I completed the project by adding a graphical user interface.
+---
 
-- I implemented a GUI that shows the game board visually.
-- The GUI displays Pac-Man, ghosts, and food in real time.
-- The GUI is connected to the server and updates according to the game state.
-- At this point, all parts of the project (algorithm, server, and GUI) work together as one system.
+## Testing and Results
+The solution was tested using JUnit tests for the client-side algorithm.  
+The algorithm was tested on Level 4, where Pac-Man successfully completes the level and wins the game.
 
-This stage focused on integration and making sure everything runs smoothly.
+---
 
+## Running the Project
+The project can be run in manual mode using keyboard controls or in automatic mode using the Ex3Algo implementation.  
+Runnable JAR files are included in the repository as required.
 
-
- How to Run
-
- The project can be run using the runnable JAR files  
-  or
-- By running the main classes directly from IntelliJ:
-  - `Ex3Main`
-  - `ServerMain`
-
-
-
-Summary
-
-This project helped me understand how to:
-- Design algorithms
-- Work with client-server architecture
-- Use BFS for decision making
-- Integrate logic, server, and GUI into a complete program
