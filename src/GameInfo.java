@@ -18,9 +18,8 @@ public class GameInfo {
 	private static PacManAlgo _manualAlgo = new ManualAlgo();
 	private static PacManAlgo _myAlgo = new Ex3Algo();
 
-	// شغّل الألغو تبعك (Auto):
+
 	public static final PacManAlgo ALGO = _myAlgo;
 
-	// إذا بدك manual رجّعي هذا واعملي تعليق للسطر اللي فوق:
-	// public static final PacManAlgo ALGO = _manualAlgo;
+
 }
